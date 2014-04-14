@@ -1,0 +1,4 @@
+({
+    baseUrl: '.',
+    name: 'main'
+})

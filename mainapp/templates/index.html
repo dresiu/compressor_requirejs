@@ -1,0 +1,16 @@
+{% load compress staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Sample Project</title>
+    {% compress js %}
+        <script src="{{ STATIC_URL }}mainapp/js/require.js"></script>
+    {% endcompress %}
+    {% compress js %}
+        <script type="text/requirejs" src="{{ STATIC_URL }}mainapp/js/build.js"></script>
+    {% endcompress %}
+</head>
+<body>
+<h1>My Sample Project</h1>
+</body>
+</html>
