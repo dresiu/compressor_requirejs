@@ -2,7 +2,13 @@ from distutils.core import setup
 
 setup(
     name='compressor_requirejs',
-    packages=['compressor_requirejs'],
+    packages=['compressor_requirejs',
+              'compressor_requirejs.compressor'],
+    package_data = {
+        "compressor_requirejs": [
+            "resources/*.js"
+        ],
+    },
     version='1.0',
     description='Library for django compressor, which helps to build requirejs',
     author='Andrzej Przybyszewski',

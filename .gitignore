@@ -3,3 +3,5 @@ tmp
 collected-static
 *.pyc
 *.pyo
+dist
+MANIFEST
