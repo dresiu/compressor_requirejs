@@ -1,4 +1,9 @@
 ({
     baseUrl: '.',
-    name: 'main'
+    name: 'main',
+    shim: {
+        'jquery': {
+            exports: '$'
+        }
+    }
 })

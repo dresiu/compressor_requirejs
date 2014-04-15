@@ -148,3 +148,7 @@ COMPRESS_PARSER = 'compressor.parser.HtmlParser'
 
 COMPRESSOR_REQUIREJS_TMP = django_project_path_join('tmp')
 
+COMPRESSOR_REQUIREJS_REQUIRED_LIBS = {
+    'jquery': 'mainapp/js/libs/jquery-2.1.0.min.js'
+}
+

@@ -40,8 +40,8 @@ class RequireJSCompiler(object):
     def required_libs(self):
         paths = []
         if hasattr(settings, 'COMPRESSOR_REQUIREJS_REQUIRED_LIBS'):
-            for arg in settings.REQUIRED_LIBS.keys():
-                path = self.get_fullpath(settings.REQUIRED_LIBS[arg])
+            for arg in settings.COMPRESSOR_REQUIREJS_REQUIRED_LIBS.keys():
+                path = self.get_fullpath(settings.COMPRESSOR_REQUIREJS_REQUIRED_LIBS[arg])
                 if path.endswith('.js'):
                     path = path[:-3]
                 paths.append('paths.%s=%s' % (arg, path))

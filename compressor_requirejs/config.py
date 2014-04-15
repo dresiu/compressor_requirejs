@@ -35,5 +35,9 @@ class LazySettings(object):
     def COMPRESSOR_REQUIREJS_NODE_EXECUTABLE(self):
         return getattr(django_settings, "COMPRESSOR_REQUIREJS_NODE_EXECUTABLE", 'node')
 
+    @property
+    def COMPRESSOR_REQUIREJS_REQUIRED_LIBS(self):
+        return getattr(django_settings, "COMPRESSOR_REQUIREJS_REQUIRED_LIBS", {})
+
 
 settings = LazySettings()
