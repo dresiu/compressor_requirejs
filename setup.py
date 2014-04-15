@@ -1,4 +1,9 @@
 from distutils.core import setup
+import os
+
+
+def read(fname):
+    return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 setup(
     name='compressor_requirejs',
@@ -11,6 +16,7 @@ setup(
     },
     version='1.1',
     description='Library for django compressor, which helps to build requirejs',
+    long_description=read('README.rst'),
     author='Andrzej Przybyszewski',
     author_email='mcendrju@gmail.com',
     url='https://github.com/dresiu/compressor_requirejs',

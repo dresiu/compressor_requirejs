@@ -98,7 +98,7 @@ Using
 Prepare at least two js files, one build file and one module file:
 
 build.js
-~~~~~~~~
+--------
 
 .. code:: javascript
 
@@ -108,7 +108,7 @@ build.js
     })
 
 main.js
-~~~~~~~
+-------
 
 .. code:: javascript
 
@@ -123,7 +123,7 @@ to ``main.js`` with ``name`` attribute, so launching build file compile
 Django template configuration
 -----------------------------
 
-.. code:: html
+::
 
      {% compress js %}
           <script type="text/requirejs" src="{{ STATIC_URL }}mainapp/js/build.js"></script>
@@ -131,7 +131,8 @@ Django template configuration
 
 Of course you have to include ``require.js`` file, ex:
 
-.. code:: html
+::
+
     {% compress js %}
         <script src="{{ STATIC_URL }}mainapp/js/require.js"></script>
     {% endcompress %}
