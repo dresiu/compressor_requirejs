@@ -1,3 +1,11 @@
+
+NEWS v1.2
+=========
+
+- invalidate cache on compiling error,
+- support for custom logging
+
+
 Introduction
 ============
 
@@ -91,6 +99,15 @@ Advanced configuration
         #node js executable path, it is preferred to have mapped 'node' in your PATH
         #default: node
         COMPRESSOR_REQUIREJS_NODE_EXECUTABLE = 'node'
+
+        #setup custom logging function for output
+        def logging_compressor_requirejs(text):
+            import logging
+            logger = logging.getLogger('mainapp.custom')
+            logger.debug(text)
+
+        COMPRESSOR_REQUIREJS_LOGGING_OUTPUT_FUNCTION = logging_compressor_requirejs
+
 
 Using
 =====

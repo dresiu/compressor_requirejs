@@ -9,6 +9,8 @@ import execjs
 
 from config import settings
 
+APP_NAME = 'compressor_requirejs'
+
 
 def current_exc_type():
     return sys.exc_info()[0]
@@ -54,13 +56,14 @@ class RequireJSCompiler(object):
         libs = self.required_libs()
         global_config = getattr(settings, 'COMPRESSOR_REQUIREJS_GLOBAL_CONFIG', None)
         global_preconfig = getattr(settings, 'COMPRESSOR_REQUIREJS_GLOBAL_PRECONFIG', None)
+        printf = settings.COMPRESSOR_REQUIREJS_LOGGING_OUTPUT_FUNCTION
         outfile = self._tmp_file_gen(filename, '_build.js')
         build_filename = self.get_fullpath(filename, resolve_path)
         #check cache
         c = CacheFilesAccess(build_filename, outfile)
 
         if not c.validate():
-            print 'cache invalid, compiling'
+            printf('[%s] cache invalid, compiling: %s' % (APP_NAME, filename))
             process_args = [settings.COMPRESSOR_REQUIREJS_NODE_EXECUTABLE,
                             self.r,
                             '-o', build_filename,
@@ -74,11 +77,13 @@ class RequireJSCompiler(object):
                 output = subprocess.check_output(process_args)
                 c.do_caching(output, self.get_fullpath(global_config) if global_config else None)
             except current_exc_type(), e:
+                c.invalidate()
                 raise Exception(e.output)
             if 'Error' in output:
+                c.invalidate()
                 raise Exception(output)
         else:
-            print 'skipping compilation'
+            printf('[%s] skipping compilation: %s' % (APP_NAME, filename))
 
         f = open(outfile, 'r')
         ret = '<script>%s</script>' % f.read() if include_tags else f.read()
@@ -135,6 +140,9 @@ class CacheFilesAccess(object):
             else:
                 return False
         return True
+
+    def invalidate(self):
+        self.cache.delete(self._cache_hash_gen(''))
 
     def _get_files(self, output):
         lines = output.split('\n')

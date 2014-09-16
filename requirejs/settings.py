@@ -152,3 +152,33 @@ COMPRESSOR_REQUIREJS_REQUIRED_LIBS = {
     'jquery': 'mainapp/js/libs/jquery-2.1.0.min.js'
 }
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+         'console':{
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+    },
+    'loggers': {
+        'mainapp.custom': {
+            'handlers': ['console'],
+            'level': 'DEBUG'
+        }
+    },
+}
+
+
+def logging_compressor_requirejs(text):
+    import logging
+    logger = logging.getLogger('mainapp.custom')
+    logger.debug(text)
+
+COMPRESSOR_REQUIREJS_LOGGING_OUTPUT_FUNCTION = logging_compressor_requirejs

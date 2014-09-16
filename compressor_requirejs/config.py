@@ -5,6 +5,8 @@ from django.conf import settings as django_settings
 
 THIS_PATH = dirname(abspath(__file__))
 
+def std_print(txt):
+    print txt
 
 class LazySettings(object):
     @property
@@ -38,6 +40,10 @@ class LazySettings(object):
     @property
     def COMPRESSOR_REQUIREJS_REQUIRED_LIBS(self):
         return getattr(django_settings, "COMPRESSOR_REQUIREJS_REQUIRED_LIBS", {})
+
+    @property
+    def COMPRESSOR_REQUIREJS_LOGGING_OUTPUT_FUNCTION(self):
+        return getattr(django_settings, "COMPRESSOR_REQUIREJS_LOGGING_OUTPUT_FUNCTION", std_print)
 
 
 settings = LazySettings()
