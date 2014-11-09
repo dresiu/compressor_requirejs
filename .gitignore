@@ -5,3 +5,4 @@ collected-static
 *.pyo
 dist
 MANIFEST
+*.egg-info

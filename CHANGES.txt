@@ -2,3 +2,4 @@ v1.0, 14.04.2014 -- initial version
 v1.1, 15.04.2014 -- required libs support
 v1.1.1, 15.04.2014 -- fixed setup file
 v1.2, 16.09.2014 -- invalidate cache on compiling error, support for custom logging
+v1.3, 9.11.2014 -- install_requires added, support for django compressor 1.4 precompiler constructor

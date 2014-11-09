@@ -1,6 +1,13 @@
 
-NEWS v1.2
+
+NEWS v1.3
 =========
+
+- install_requires added,
+- support for django compressor 1.4 precompiler constructor
+
+update v1.2
+===========
 
 - invalidate cache on compiling error,
 - support for custom logging
@@ -9,7 +16,7 @@ NEWS v1.2
 Introduction
 ============
 
-This module ables django compressor to compile requirejs files info one
+This module ables django compressor to compile requirejs files into one
 or a few bigger files using r.js.
 
 Features:
