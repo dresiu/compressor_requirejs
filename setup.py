@@ -1,4 +1,7 @@
-from distutils.core import setup
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
 import os
 
 
@@ -25,6 +28,7 @@ setup(
     download_url='https://github.com/dresiu/compressor_requirejs/tarball/1.2',
     keywords=['compressor_requirejs', 'django_compressor', 'django', 'compressor', 'requirejs'],
     requires=['django_compressor', 'PyExecJs'],
+    install_requires=['django_compressor>=1.3', 'PyExecJs>=1.0.4'],
     classifiers=["Environment :: Web Environment",
                  "Framework :: Django",
                  "Intended Audience :: Developers",
