@@ -32,7 +32,10 @@ class RequireJSCompiler(object):
             return path
         files = finders.find(path, all=True)
         if isinstance(files, list):
-            return files[0]
+            if len(files) > 0:
+                return files[0]
+            else:
+                return path
         elif files is not None:
             return files
         else:
