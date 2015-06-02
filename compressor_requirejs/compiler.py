@@ -25,6 +25,11 @@ class RequireJSCompiler(object):
         if not self.tmp:
             raise ImproperlyConfigured('COMPRESSOR_REQUIREJS_TMP not set')
 
+        self.libs = self.required_libs()
+        self.global_config = getattr(settings, 'COMPRESSOR_REQUIREJS_GLOBAL_CONFIG', None)
+        self.global_preconfig = getattr(settings, 'COMPRESSOR_REQUIREJS_GLOBAL_PRECONFIG', None)
+        self.printf = settings.COMPRESSOR_REQUIREJS_LOGGING_OUTPUT_FUNCTION
+
     def get_fullpath(self, path, resolve_path=True):
         if os.path.isabs(path):
             return path
@@ -56,29 +61,25 @@ class RequireJSCompiler(object):
         return os.path.join(self.tmp, filename.replace('\\', '_').replace('/', '_').replace('.', '_') + postfix)
 
     def requirejs(self, filename, resolve_path=True, include_tags=True):
-        libs = self.required_libs()
-        global_config = getattr(settings, 'COMPRESSOR_REQUIREJS_GLOBAL_CONFIG', None)
-        global_preconfig = getattr(settings, 'COMPRESSOR_REQUIREJS_GLOBAL_PRECONFIG', None)
-        printf = settings.COMPRESSOR_REQUIREJS_LOGGING_OUTPUT_FUNCTION
         outfile = self._tmp_file_gen(filename, '_build.js')
         build_filename = self.get_fullpath(filename, resolve_path)
         #check cache
         c = CacheFilesAccess(build_filename, outfile)
 
         if not c.validate():
-            printf('[%s] cache invalid, compiling: %s' % (APP_NAME, filename))
+            self.printf('[%s] cache invalid, compiling: %s' % (APP_NAME, filename))
             process_args = [settings.COMPRESSOR_REQUIREJS_NODE_EXECUTABLE,
                             self.r,
                             '-o', build_filename,
                             'out=' + outfile]
-            process_args += libs
-            if global_config:
-                process_args.append('mainConfigFile=' + self.get_fullpath(global_config))
+            process_args += self.libs
+            if self.global_config:
+                process_args.append('mainConfigFile=' + self.get_fullpath(self.global_config))
             else:
-                process_args.append('mainConfigFile=' + global_preconfig)
+                process_args.append('mainConfigFile=' + self.global_preconfig)
             try:
                 output = subprocess.check_output(process_args)
-                c.do_caching(output, self.get_fullpath(global_config) if global_config else None)
+                c.do_caching(output, self.get_fullpath(self.global_config) if self.global_config else None)
             except current_exc_type(), e:
                 c.invalidate()
                 raise Exception(e.output)
@@ -86,12 +87,30 @@ class RequireJSCompiler(object):
                 c.invalidate()
                 raise Exception(output)
         else:
-            printf('[%s] skipping compilation: %s' % (APP_NAME, filename))
+            self.printf('[%s] skipping compilation: %s' % (APP_NAME, filename))
 
         f = open(outfile, 'r')
         ret = '<script>%s</script>' % f.read() if include_tags else f.read()
         f.close()
         return ret
+
+    def requirejs_dir(self, filename, dirpath, resolve_path=True):
+        build_filename = self.get_fullpath(filename, resolve_path)
+        process_args = [settings.COMPRESSOR_REQUIREJS_NODE_EXECUTABLE,
+                        self.r,
+                        '-o', build_filename,
+                        'dir=' + dirpath]
+        process_args += self.libs
+        if self.global_config:
+            process_args.append('mainConfigFile=' + self.get_fullpath(self.global_config))
+        else:
+            process_args.append('mainConfigFile=' + self.global_preconfig)
+        try:
+            output = subprocess.check_output(process_args)
+        except current_exc_type(), e:
+            raise Exception(e.output)
+        if 'Error' in output:
+            raise Exception(output)
 
 
 class CacheFileModel(object):
