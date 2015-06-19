@@ -1,3 +1,4 @@
+import codecs
 import subprocess
 import os
 import sys
@@ -89,7 +90,7 @@ class RequireJSCompiler(object):
         else:
             self.printf('[%s] skipping compilation: %s' % (APP_NAME, filename))
 
-        f = open(outfile, 'r')
+        f = codecs.open(outfile, 'r', 'utf-8')
         ret = '<script>%s</script>' % f.read() if include_tags else f.read()
         f.close()
         return ret
