@@ -59,7 +59,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'compressor',
     'mainapp',
-    'django.contrib.admin',
     'compressor_requirejs'
 )
 

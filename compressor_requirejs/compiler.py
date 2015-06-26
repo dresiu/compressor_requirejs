@@ -8,13 +8,17 @@ from django.core.exceptions import ImproperlyConfigured
 from django.contrib.staticfiles import finders
 import execjs
 
-from config import settings
+from .config import settings
 
 APP_NAME = 'compressor_requirejs'
 
 
 def current_exc_type():
     return sys.exc_info()[0]
+
+
+class RequireJSCompilerException(Exception):
+    pass
 
 
 class RequireJSCompiler(object):
@@ -46,7 +50,6 @@ class RequireJSCompiler(object):
             return files
         else:
             return path
-
 
     def required_libs(self):
         paths = []
@@ -81,12 +84,14 @@ class RequireJSCompiler(object):
             try:
                 output = subprocess.check_output(process_args)
                 c.do_caching(output, self.get_fullpath(self.global_config) if self.global_config else None)
-            except current_exc_type(), e:
+            except current_exc_type() as e:
                 c.invalidate()
-                raise Exception(e.output)
-            if 'Error' in output:
+                if hasattr(e, 'output'):
+                    raise RequireJSCompilerException(e.output.decode('utf-8'))
+                raise e
+            if u'Error' in output.decode('utf-8'):
                 c.invalidate()
-                raise Exception(output)
+                raise RequireJSCompilerException(output.decode('utf-8'))
         else:
             self.printf('[%s] skipping compilation: %s' % (APP_NAME, filename))
 
@@ -108,10 +113,12 @@ class RequireJSCompiler(object):
             process_args.append('mainConfigFile=' + self.global_preconfig)
         try:
             output = subprocess.check_output(process_args)
-        except current_exc_type(), e:
-            raise Exception(e.output)
-        if 'Error' in output:
-            raise Exception(output)
+        except current_exc_type() as e:
+            if hasattr(e, 'output'):
+                raise RequireJSCompilerException(e.output.decode('utf-8'))
+            raise e
+        if u'Error' in output:
+            raise RequireJSCompilerException(output.decode('utf-8'))
 
 
 class CacheFileModel(object):
@@ -168,7 +175,7 @@ class CacheFilesAccess(object):
         self.cache.delete(self._cache_hash_gen(''))
 
     def _get_files(self, output):
-        lines = output.split('\n')
+        lines = output.decode('utf-8').split(u'\n')
         module_files = [self.build_file] + lines
         return [self._normalize(m) for m in module_files if os.path.isfile(m) or self.MODULE_PATH_SPLIT in m]
 

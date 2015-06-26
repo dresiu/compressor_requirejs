@@ -6,7 +6,7 @@ from django.conf import settings as django_settings
 THIS_PATH = dirname(abspath(__file__))
 
 def std_print(txt):
-    print txt
+    print(txt)
 
 class LazySettings(object):
     @property
