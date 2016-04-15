@@ -3,12 +3,20 @@ import subprocess
 import os
 import sys
 
-from django.core.cache import get_cache
 from django.core.exceptions import ImproperlyConfigured
 from django.contrib.staticfiles import finders
 import execjs
 
 from .config import settings
+
+try:
+    from django.core.cache import caches
+
+    def get_cache(name):
+        return caches[name]
+except ImportError:
+    from django.core.cache import get_cache
+
 
 APP_NAME = 'compressor_requirejs'
 

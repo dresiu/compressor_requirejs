@@ -1,7 +1,13 @@
+newest v1.4
+===========
 
+- support for python 3.4
+- support for django 1.9.x
+- support for django-compressor up to 1.6 (2.0 not officially supported but may work in some circumstances)
+- support for utf8 encoding in files (required encoding)
 
-NEWS v1.3
-=========
+v1.3
+====
 
 - install_requires added,
 - support for django compressor 1.4 precompiler constructor
@@ -36,9 +42,9 @@ Features:
 Requirements
 ============
 
--  Django >= 1.5
--  django\_compressor >= 1.3
--  PyExecJs 1.0.4
+-  Django >= 1.6
+-  django\_compressor >= 1.3 and < 2.0
+-  PyExecJs >= 1.1.0
 
 -  node js
 
