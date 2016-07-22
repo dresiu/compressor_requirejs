@@ -1,5 +1,9 @@
-newest v1.4
-===========
+v1.5
+====
+- license changed to the MIT
+
+v1.4
+====
 
 - support for python 3.4
 - support for django 1.9.x
@@ -12,8 +16,8 @@ v1.3
 - install_requires added,
 - support for django compressor 1.4 precompiler constructor
 
-update v1.2
-===========
+v1.2
+====
 
 - invalidate cache on compiling error,
 - support for custom logging
